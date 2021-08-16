@@ -41,6 +41,7 @@ submitBtn.addEventListener('click', () => {
 
 function addBookToShelf() {
     const divBook = document.createElement('div');
+    divBook.classList.add('books');
     divBook.classList.add(`bookNumber${(myShelf.length-1)}`);
     bookContainer.appendChild(divBook);
     const divTitle = document.createElement('div');
@@ -70,10 +71,17 @@ function addBookToShelf() {
         label.appendChild(span);
     }
     readStatus(myShelf[(myShelf.length-1)], myShelf[(myShelf.length-1)].status);
-    const deleteBtn = document.createElement('button');
-    deleteBtn.textContent = 'Delete';
+    const deleteBtn = document.createElement('span');
+    deleteBtn.classList.add('material-icons');
+    deleteBtn.textContent = 'delete';
     divBook.appendChild(deleteBtn);
     deleteBtn.addEventListener('click', () => {
         divBook.remove();
     })
 }
+
+// Example Books
+myShelf.push(new Book('The Silmarillion', 'J. R. R. Tolkien', 365, false));
+addBookToShelf();
+myShelf.push(new Book('Republic', 'Plato', 416, true));
+addBookToShelf();
