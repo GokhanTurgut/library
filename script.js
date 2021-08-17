@@ -10,11 +10,21 @@ const addBookModal = document.getElementById('addBookModal');
 
 let myShelf = [];
 
-function Book(title, author, pages, status) {
+// If local storage is not empty get books and put them into MyShelf
+if (JSON.parse(localStorage.getItem('books'))) {
+    myShelf = JSON.parse(localStorage.getItem('books'));
+    myShelf.forEach((book) => {
+        book.display = false;
+    })
+    displayBooks();
+}
+
+function Book(title, author, pages, status, display) {
     this.title = title;
     this.author = author;
     this.pages = pages;
     this.status = status;
+    this.display = display;
 }
 
 addBookBtn.addEventListener('click', () => {
@@ -34,54 +44,67 @@ window.onclick = function(event) {
 submitBtn.addEventListener('click', () => {
     if (bookTitle.value == '' || bookAuthor.value == '' || bookPages.value == '') return;
     else {
-        myShelf.push(new Book(bookTitle.value, bookAuthor.value, bookPages.value, bookStatus.checked));
-        addBookToShelf();
+        myShelf.push(new Book(bookTitle.value, bookAuthor.value, bookPages.value, bookStatus.checked, false));
+        displayBooks();
     }
 })
 
-function addBookToShelf() {
-    const divBook = document.createElement('div');
-    divBook.classList.add('books');
-    divBook.classList.add(`bookNumber${(myShelf.length-1)}`);
-    bookContainer.appendChild(divBook);
-    const divTitle = document.createElement('div');
-    divTitle.textContent = myShelf[(myShelf.length-1)].title;
-    divBook.appendChild(divTitle);
-    const divAuthor = document.createElement('div');
-    divAuthor.textContent = myShelf[(myShelf.length-1)].author;
-    divBook.appendChild(divAuthor);
-    const divPages = document.createElement('div');
-    divPages.textContent = myShelf[(myShelf.length-1)].pages;
-    divBook.appendChild(divPages);
-    function readStatus(book, status) {
-        const label = document.createElement('label');
-        label.classList.add('switch');
-        divBook.appendChild(label);
-        const input = document.createElement('input');
-        input.type = 'checkbox';
-        input.id = `bookNumber${myShelf.indexOf(book)}`;
-        input.checked = status;
-        input.addEventListener('change', () => {
-            book.status = input.checked;
-        })
-        label.appendChild(input);
-        const span = document.createElement('span');
-        span.classList.add('slider');
-        span.classList.add('round');
-        label.appendChild(span);
-    }
-    readStatus(myShelf[(myShelf.length-1)], myShelf[(myShelf.length-1)].status);
-    const deleteBtn = document.createElement('span');
-    deleteBtn.classList.add('material-icons');
-    deleteBtn.textContent = 'delete';
-    divBook.appendChild(deleteBtn);
-    deleteBtn.addEventListener('click', () => {
-        divBook.remove();
-    })
+function displayBooks() {
+    myShelf.forEach((book, index) => {
+        if (!book.display) {
+            const divBook = document.createElement('div');
+            divBook.classList.add('books');
+            divBook.classList.add(`bookNumber${index}`);
+            divBook.dataset.indexNumber = index;
+            bookContainer.appendChild(divBook);
+            const divTitle = document.createElement('div');
+            divTitle.textContent = book.title;
+            divBook.appendChild(divTitle);
+            const divAuthor = document.createElement('div');
+            divAuthor.textContent = book.author;
+            divBook.appendChild(divAuthor);
+            const divPages = document.createElement('div');
+            divPages.textContent = book.pages;
+            divBook.appendChild(divPages);
+            function readStatus(book, index, status) {
+                const label = document.createElement('label');
+                label.classList.add('switch');
+                divBook.appendChild(label);
+                const input = document.createElement('input');
+                input.type = 'checkbox';
+                input.id = `bookNumber${index}`;
+                input.checked = status;
+                input.addEventListener('change', () => {
+                    book.status = input.checked;
+                    storage();
+                })
+                label.appendChild(input);
+                const span = document.createElement('span');
+                span.classList.add('slider');
+                span.classList.add('round');
+                label.appendChild(span);
+            }
+            readStatus(book, index, book.status);
+            const deleteBtn = document.createElement('span');
+            deleteBtn.classList.add('material-icons');
+            deleteBtn.textContent = 'delete';
+            divBook.appendChild(deleteBtn);
+            deleteBtn.addEventListener('click', () => {
+                divBook.remove();
+                myShelf.splice(divBook.dataset.indexNumber, 1);
+                storage();
+            })
+            book.display = true;
+            storage();
+        }
+    })    
+}
+
+function storage() {
+    localStorage.setItem('books', JSON.stringify(myShelf));
 }
 
 // Example Books
-myShelf.push(new Book('The Silmarillion', 'J. R. R. Tolkien', 365, false));
-addBookToShelf();
-myShelf.push(new Book('Republic', 'Plato', 416, true));
-addBookToShelf();
+// myShelf.push(new Book('The Silmarillion', 'J. R. R. Tolkien', 365, false, false));
+// myShelf.push(new Book('Republic', 'Plato', 416, true, false));
+// displayBooks();

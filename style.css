@@ -5,19 +5,19 @@ body {
     font-family: 'STIX Two Text', serif;
     display: flex;
     flex-direction: column;
-    background-color: rgb(33, 7, 82);
+    background-color: #1F2833;
 }
 
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: rgb(255, 136, 40);
+  background-color: #7395AE;
   padding: 1rem 2rem;
 }
 
 header>h1 {
-  color: rgb(1, 59, 82);
+  color: azure;
   font-size: 2.5rem;
 }
 
@@ -95,8 +95,8 @@ button:hover , .btn:hover {
   align-items: center;
   color: azure;
   font-size: 2rem;
-  border: rgb(173, 0, 0) .5rem solid;
-  border-radius: .8rem;
+  border: #ADADAD .5rem solid;
+  border-radius: 1rem;
   padding: 1rem;
   background-color: rgb(0, 11, 19);
 }
