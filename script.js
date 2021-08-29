@@ -19,35 +19,39 @@ if (JSON.parse(localStorage.getItem('books'))) {
     displayBooks();
 }
 
-function Book(title, author, pages, status, display) {
-    this.title = title;
-    this.author = author;
-    this.pages = pages;
-    this.status = status;
-    this.display = display;
-}
-
-addBookBtn.addEventListener('click', () => {
-    addBookModal.style.display = "flex";
-})
-
-closeBtn.addEventListener('click', () => {
-    addBookModal.style.display = "none";
-})
-
-window.onclick = function(event) {
-    if (event.target == addBookModal) {
-      addBookModal.style.display = "none";
+class Book {
+    constructor(title, author, pages, status, display) {
+        this.title = title;
+        this.author = author;
+        this.pages = pages;
+        this.status = status;
+        this.display = display;
     }
 }
 
-submitBtn.addEventListener('click', () => {
-    if (bookTitle.value == '' || bookAuthor.value == '' || bookPages.value == '') return;
-    else {
-        myShelf.push(new Book(bookTitle.value, bookAuthor.value, bookPages.value, bookStatus.checked, false));
-        displayBooks();
+const eventListeners = (() => {
+    addBookBtn.addEventListener('click', () => {
+        addBookModal.style.display = "flex";
+    })
+    
+    closeBtn.addEventListener('click', () => {
+        addBookModal.style.display = "none";
+    })
+    
+    window.onclick = function(event) {
+        if (event.target == addBookModal) {
+          addBookModal.style.display = "none";
+        }
     }
-})
+    
+    submitBtn.addEventListener('click', () => {
+        if (bookTitle.value == '' || bookAuthor.value == '' || bookPages.value == '') return;
+        else {
+            myShelf.push(new Book(bookTitle.value, bookAuthor.value, bookPages.value, bookStatus.checked, false));
+            displayBooks();
+        }
+    })
+})()
 
 function displayBooks() {
     myShelf.forEach((book, index) => {
